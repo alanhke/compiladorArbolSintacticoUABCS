@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sintaxia</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compilador Educativo</title>
+  <link rel="stylesheet" href="./styles/main.css" />
 </head>
 <body>
-    
+  <header class="top-bar">
+    <h1>Compilador Educativo</h1>
+    <button id="runButton" type="button">Ejecutar</button>
+  </header>
+
+  <section id="messageArea" class="message info">
+    Escribe código y presiona "Ejecutar" para analizarlo.
+  </section>
+
+  <main class="layout">
+    <section class="panel left-panel">
+      <h2>Código fuente</h2>
+      <textarea id="codeEditor" spellcheck="false">
+let x = 10;
+let y = x + 5;
+      </textarea>
+    </section>
+
+    <section class="panel right-panel">
+      <h2>Árbol sintáctico (texto)</h2>
+      <pre id="treeOutput">Aquí aparecerá el AST en formato texto.</pre>
+    </section>
+  </main>
+
+  <section class="panel tokens-panel">
+    <h2>Tokens</h2>
+    <pre id="tokensOutput">Aquí aparecerán los tokens.</pre>
+  </section>
+
+  <script type="module" src="../src/main.js"></script>
 </body>
 </html>
