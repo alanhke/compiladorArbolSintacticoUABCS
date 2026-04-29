@@ -1,5 +1,6 @@
 import { tokenize } from "./lexer/lexer.js";
 import { parse } from "./parser/parser.js";
+import { renderTree } from "./visualizer/tree.js";
 
 const runButton = document.getElementById("runButton");
 const codeEditor = document.getElementById("codeEditor");
@@ -19,10 +20,12 @@ function runCompilerFlow() {
     const tokens = tokenize(sourceCode);
     const ast = parse(tokens);
 
-    // Muestra datos para aprendizaje y depuración.
+    // Muestra los tokens para aprendizaje y depuración.
     tokensOutput.textContent = JSON.stringify(tokens, null, 2);
-    treeOutput.textContent = printAstAsTree(ast);
     console.log("AST generado:", ast);
+
+    // Renderiza el árbol visualmente en #tree-container.
+    renderTree(ast);
 
     showMessage(
       "success",
@@ -30,7 +33,18 @@ function runCompilerFlow() {
     );
   } catch (error) {
     showMessage("error", error.message);
-    treeOutput.textContent = "No se pudo generar el AST por errores de sintaxis.";
+
+    // Limpia el contenedor y muestra mensaje de error en él.
+    const treeContainer = document.getElementById("tree-container");
+    if (treeContainer) {
+      treeContainer.innerHTML = "";
+      const errorMsg = document.createElement("p");
+      errorMsg.className = "tree-error-msg";
+      errorMsg.textContent = "No se pudo generar el árbol sintáctico.";
+      treeContainer.appendChild(errorMsg);
+    }
+
+    console.error("[runCompilerFlow]", error);
   }
 }
 
@@ -39,38 +53,7 @@ function showMessage(type, text) {
   messageArea.textContent = text;
 }
 
-/**
- * Visualizador temporal en texto:
- * Convierte un AST en una estructura indentada para verla en pantalla.
- *
- * TODO: Mover esta función a src/visualizer/tree.js en la siguiente etapa.
- */
-function printAstAsTree(node, level = 0) {
-  if (!node || typeof node !== "object") return "";
-
-  const indent = "  ".repeat(level);
-  let output = `${indent}${node.type || "Node"}`;
-
-  if (node.name) output += ` (${node.name})`;
-  if (node.value !== undefined) output += ` (${node.value})`;
-  if (node.operator) output += ` [${node.operator}]`;
-  output += "\n";
-
-  for (const key of Object.keys(node)) {
-    if (["type", "name", "value", "operator"].includes(key)) continue;
-    const child = node[key];
-
-    if (Array.isArray(child)) {
-      child.forEach((item) => {
-        output += printAstAsTree(item, level + 1);
-      });
-    } else if (child && typeof child === "object") {
-      output += printAstAsTree(child, level + 1);
-    }
-  }
-
-  return output;
-}
+// printAstAsTree() fue migrada a src/visualizer/tree.js como renderTree().
 
 // TODO: En la siguiente iteración:
 // 1) Crear src/ast/ast.js con factorías de nodos.
