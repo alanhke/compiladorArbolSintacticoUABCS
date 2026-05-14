@@ -1,4 +1,4 @@
-const KEYWORDS = new Set(["let"]);
+const KEYWORDS = new Set(["let", "if", "else", "while", "for", "print", "true", "false"]);
 
 /**
  * Convierte el código fuente en una lista de tokens.
@@ -75,8 +75,62 @@ export function tokenize(sourceCode) {
       continue;
     }
 
+    if (char === "<" || char === ">") {
+      advance();
+      if (current < sourceCode.length && sourceCode[current] === "=") {
+        addToken("OPERATOR", `${char}=`, tokenLine, tokenColumn);
+        advance();
+      } else {
+        addToken("OPERATOR", char, tokenLine, tokenColumn);
+      }
+      continue;
+    }
+
     if (char === "=") {
-      addToken("EQUAL", advance(), tokenLine, tokenColumn);
+      advance();
+      if (current < sourceCode.length && sourceCode[current] === "=") {
+        addToken("OPERATOR", "==", tokenLine, tokenColumn);
+        advance();
+      } else {
+        addToken("EQUAL", "=", tokenLine, tokenColumn);
+      }
+      continue;
+    }
+
+    if (char === "!") {
+      advance();
+      if (current < sourceCode.length && sourceCode[current] === "=") {
+        addToken("OPERATOR", "!=", tokenLine, tokenColumn);
+        advance();
+        continue;
+      }
+      throw new Error(
+        `Carácter no reconocido "!" en línea ${line}, columna ${column}.`
+      );
+    }
+
+    if (char === "(") {
+      addToken("LPAREN", advance(), tokenLine, tokenColumn);
+      continue;
+    }
+
+    if (char === ")") {
+      addToken("RPAREN", advance(), tokenLine, tokenColumn);
+      continue;
+    }
+
+    if (char === "{") {
+      addToken("LBRACE", advance(), tokenLine, tokenColumn);
+      continue;
+    }
+
+    if (char === "}") {
+      addToken("RBRACE", advance(), tokenLine, tokenColumn);
+      continue;
+    }
+
+    if (char === ",") {
+      addToken("COMMA", advance(), tokenLine, tokenColumn);
       continue;
     }
 

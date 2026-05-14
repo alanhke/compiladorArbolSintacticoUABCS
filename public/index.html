@@ -19,10 +19,14 @@
   <main class="layout">
     <section class="panel left-panel">
       <h2>Código fuente</h2>
-      <textarea id="codeEditor" spellcheck="false">
-let x = 10;
-let y = x + 5;
-      </textarea>
+      <div class="editor-shell">
+        <textarea id="lineNumbers" aria-hidden="true" readonly tabindex="-1"></textarea>
+        <div class="code-layer">
+          <pre id="editorHighlights" aria-hidden="true"></pre>
+          <textarea id="codeEditor" spellcheck="false" aria-label="Editor de código">let x = 10;
+let y = x + 5;</textarea>
+        </div>
+      </div>
     </section>
 
     <section class="panel right-panel">
@@ -30,6 +34,11 @@ let y = x + 5;
       <div id="tree-container"></div>
     </section>
   </main>
+
+  <section class="panel console-panel">
+    <h2>Consola de salida</h2>
+    <pre id="consoleOutput">La consola está vacía.</pre>
+  </section>
 
   <section class="panel tokens-panel">
     <h2>Tokens</h2>

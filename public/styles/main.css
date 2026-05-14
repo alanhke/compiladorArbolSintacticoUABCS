@@ -74,18 +74,123 @@ body {
 }
 
 #codeEditor {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   width: 100%;
-  min-height: 320px;
-  border: 1px solid #d1d5db;
-  border-radius: 0.45rem;
+  min-height: 100%;
+  border: 0;
+  border-radius: 0;
   padding: 0.75rem;
   font-family: "Courier New", monospace;
   font-size: 0.95rem;
-  resize: vertical;
+  line-height: 1.5;
+  resize: none;
+  background: transparent;
+  color: transparent;
+  caret-color: #111827;
+  overflow: auto;
+  white-space: pre;
+}
+
+.editor-shell {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  border: 1px solid #d1d5db;
+  border-radius: 0.45rem;
+  overflow: hidden;
+  background: #f8fafc;
+  min-height: 320px;
+}
+
+#lineNumbers {
+  width: 56px;
+  min-height: 320px;
+  margin: 0;
+  border: 0;
+  border-right: 1px solid #d1d5db;
+  background: #eef2f7;
+  color: #64748b;
+  padding: 0.75rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: right;
+  resize: none;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.code-layer {
+  position: relative;
+  min-height: 320px;
+  overflow: visible;
+}
+
+.code-layer pre {
+  margin: 0;
+  width: 100%;
+  min-height: 320px;
+  padding: 0.75rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+#editorHighlights {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  white-space: pre;
+  color: #334155;
+  user-select: none;
+}
+
+.editor-line {
+  display: block;
+  min-height: 1.5em;
+  border-radius: 0.25rem;
+  padding: 0 0.2rem;
+}
+
+.editor-line.error-line {
+  position: relative;
+  background: rgba(254, 226, 226, 0.95);
+  color: #991b1b;
+}
+
+.editor-line.error-line::before {
+  content: "!";
+  position: absolute;
+  left: -0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+
+.editor-line.error-line .line-text {
+  background: rgba(248, 113, 113, 0.14);
+}
+
+.editor-line .line-text {
+  display: inline;
 }
 
 #treeOutput,
-#tokensOutput {
+#tokensOutput,
+#consoleOutput {
   min-height: 160px;
   margin: 0;
   padding: 0.75rem;
@@ -98,5 +203,9 @@ body {
 }
 
 .tokens-panel {
+  margin: 0 1.5rem 1.5rem;
+}
+
+.console-panel {
   margin: 0 1.5rem 1.5rem;
 }

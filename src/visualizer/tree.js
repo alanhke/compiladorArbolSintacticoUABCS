@@ -38,6 +38,10 @@ export function renderTree(ast) {
   rootList.className = 'ast-tree';
   rootList.appendChild(buildNodeElement(ast));
   container.appendChild(rootList);
+
+  // Asegura una vista inicial centrada cuando el árbol desborda en horizontal.
+  const maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+  container.scrollLeft = maxScrollLeft / 2;
 }
 
 // ─────────────────────────────────────────────────────────
@@ -199,6 +203,7 @@ export function translateNodeType(type) {
 
     // — Instrucciones —
     ExpressionStatement:   'Instrucción',
+    PrintStatement:        'Impresión',
     ReturnStatement:       'Retorno',
     IfStatement:           'Condicional Si',
     WhileStatement:        'Ciclo Mientras',
@@ -311,8 +316,8 @@ function injectStyles() {
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 40px 20px;
-      overflow-x: auto;
+      padding: 40px 48px;
+      overflow: auto;
       background: #f1f5f9;
       min-height: 300px;
       font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -323,9 +328,14 @@ function injectStyles() {
     .ast-tree ul {
       display: flex;
       justify-content: center;
+      width: max-content;
       padding: 0;
       margin: 0;
       list-style: none;
+    }
+
+    .ast-tree {
+      padding: 0 16px;
     }
 
     .ast-tree li {
@@ -370,6 +380,7 @@ function injectStyles() {
     .ast-tree li:last-child::after  { border: none; }
 
     .ast-tree li:first-child::after {
+      border-left: 2px solid #94a3b8;
       border-radius: 6px 0 0 0;
     }
     .ast-tree li:last-child::before {
