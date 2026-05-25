@@ -45,7 +45,11 @@ export function parse(tokens) {
   function consume(type, message, value = null) {
     if (check(type, value)) return advance();
     const token = peek();
-    throw new Error(`${message} Línea aproximada: ${token.line}.`);
+    const prev = current > 0 ? previous() : null;
+    const missingCloser =
+      type === "SEMICOLON" || type === "RPAREN" || type === "RBRACE";
+    const line = missingCloser && prev ? prev.line : token.line;
+    throw new Error(`${message} Línea aproximada: ${line}.`);
   }
 
   function parseProgram() {
